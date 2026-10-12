@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Us: The Movie</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --netflix-red: #e50914;
+      --netflix-black: #141414;
+      --text-primary: #ffffff;
+      --text-secondary: #b3b3b3;
+    }
+
+    html, body {
+      background: var(--netflix-black);
+      color: var(--text-primary);
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ============================================================
+       NAV BAR
+       ============================================================ */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 68px;
+      padding: 0 4%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 100;
+      background: linear-gradient(180deg, rgba(0,0,0,0.85) 10%, transparent);
+      transition: background 0.3s ease;
+    }
+
+    .nav.scrolled {
+      background: var(--netflix-black);
+    }
+
+    .nav-logo {
+      color: var(--netflix-red);
+      font-size: 26px;
+      font-weight: 900;
+      letter-spacing: -1.5px;
+      text-transform: uppercase;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .nav-logo span {
+      color: #fff;
+      font-weight: 300;
+      letter-spacing: 0;
+      font-size: 22px;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .nav-icon {
+      width: 22px;
+      height: 22px;
+      fill: #fff;
+      cursor: pointer;
+      opacity: 0.9;
+      transition: opacity 0.2s;
+    }
+
+    .nav-icon:hover { opacity: 1; }
+
+    .nav-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 4px;
+      background: linear-gradient(135deg, #e50914, #ff6b6b);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    /* ============================================================
+       HERO BANNER
+       ============================================================ */
+    .hero {
+      position: relative;
+      height: 90vh;
+      min-height: 520px;
+      width: 100%;
+      display: flex;
+      align-items: flex-end;
+      padding: 0 4% 8%;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background-image: url('assets/hero.jpg');
+      background-size: cover;
+      background-position: center 30%;
+      z-index: 1;
+    }
+
+    /* Darkening + fade to page background (Netflix signature) */
+    .hero-bg::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(180deg, rgba(20,20,20,0.4) 0%, transparent 30%, rgba(20,20,20,0.9) 85%, var(--netflix-black) 100%),
+        linear-gradient(90deg, rgba(20,20,20,0.95) 0%, rgba(20,20,20,0.5) 45%, transparent 75%);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 560px;
+      animation: heroFadeIn 1.2s ease-out 0.2s both;
+    }
+
+    @keyframes heroFadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero-badge {
+      display: inline-block;
+      font-size: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      margin-bottom: 12px;
+    }
+
+    .hero-badge::before {
+      content: "N";
+      color: var(--netflix-red);
+      font-weight: 900;
+      font-size: 16px;
+      margin-right: 8px;
+      vertical-align: middle;
+      letter-spacing: 0;
+    }
+
+    .hero-title {
+      font-size: clamp(2.4rem, 6vw, 4.5rem);
+      font-weight: 900;
+      line-height: 1;
+      letter-spacing: -2px;
+      margin-bottom: 16px;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.6);
+    }
+
+    .hero-meta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+    }
+
+    .hero-meta .match {
+      color: #46d369;
+      font-weight: 600;
+    }
+
+    .hero-meta .rating {
+      border: 1px solid var(--text-secondary);
+      padding: 1px 6px;
+      font-size: 11px;
+      letter-spacing: 1px;
+    }
+
+    .hero-synopsis {
+      font-size: clamp(0.95rem, 1.4vw, 1.1rem);
+      line-height: 1.55;
+      color: #e5e5e5;
+      margin-bottom: 28px;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 28px;
+      border: none;
+      border-radius: 4px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.15s, background 0.2s;
+      font-family: inherit;
+    }
+
+    .btn:active { transform: scale(0.97); }
+
+    .btn-play {
+      background: #fff;
+      color: #000;
+    }
+
+    .btn-play:hover { background: rgba(255,255,255,0.85); }
+
+    .btn-info {
+      background: rgba(109,109,110,0.7);
+      color: #fff;
+    }
+
+    .btn-info:hover { background: rgba(109,109,110,0.55); }
+
+    .btn svg {
+      width: 22px;
+      height: 22px;
+      fill: currentColor;
+    }
+
+    /* ============================================================
+       CONTENT ROWS
+       ============================================================ */
+    .rows {
+      position: relative;
+      z-index: 3;
+      margin-top: 0px;
+      padding-bottom: 80px;
+    }
+
+    .row {
+      margin-bottom: 36px;
+    }
+
+    .row-title {
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: #e5e5e5;
+      padding: 0 4%;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .row-title .explore {
+      font-size: 12px;
+      color: var(--text-secondary);
+      font-weight: 400;
+      letter-spacing: 0.5px;
+      opacity: 0;
+      transition: opacity 0.2s;
+      cursor: pointer;
+    }
+
+    .row:hover .row-title .explore { opacity: 1; }
+
+    .row-scroll {
+      display: flex;
+      gap: 8px;
+      padding: 8px 4% 24px;
+      overflow-x: auto;
+      scroll-behavior: smooth;
+      scrollbar-width: none;
+    }
+
+    .row-scroll::-webkit-scrollbar { display: none; }
+
+    .card {
+      flex: 0 0 auto;
+      width: 240px;
+      aspect-ratio: 16 / 9;
+      border-radius: 4px;
+      overflow: hidden;
+      position: relative;
+      cursor: pointer;
+      background: #2a2a2a;
+      transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+      transform-origin: center;
+    }
+
+    .card:hover {
+      transform: scale(1.08);
+      z-index: 10;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+    }
+
+    .card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: filter 0.3s;
+    }
+
+    .card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, transparent 55%, rgba(0,0,0,0.85));
+      opacity: 0;
+      transition: opacity 0.3s;
+      pointer-events: none;
+    }
+
+    .card:hover::after { opacity: 1; }
+
+    .card-label {
+      position: absolute;
+      bottom: 8px;
+      left: 10px;
+      right: 10px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #fff;
+      opacity: 0;
+      transform: translateY(6px);
+      transition: opacity 0.3s, transform 0.3s;
+      z-index: 2;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.8);
+    }
+
+    .card:hover .card-label {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ============================================================
+       FOOTER
+       ============================================================ */
+    .footer {
+      padding: 40px 4% 60px;
+      color: #777;
+      font-size: 13px;
+      text-align: center;
+      line-height: 1.8;
+    }
+
+    .footer .heart {
+      color: var(--netflix-red);
+      display: inline-block;
+      animation: heartbeat 1.4s ease-in-out infinite;
+    }
+
+    @keyframes heartbeat {
+      0%, 100% { transform: scale(1); }
+      15%      { transform: scale(1.2); }
+      30%      { transform: scale(1); }
+      45%      { transform: scale(1.15); }
+    }
+
+    /* ============================================================
+       VIDEO MODAL (Phase 4 hook — stub for now)
+       ============================================================ */
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.9);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 20px;
+      animation: modalIn 0.3s ease;
+    }
+
+    .modal.active { display: flex; }
+
+    @keyframes modalIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 24px;
+      right: 24px;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.1);
+      border: none;
+      color: #fff;
+      font-size: 22px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-close:hover { background: rgba(255,255,255,0.2); }
+
+    .modal video {
+      max-width: 100%;
+      max-height: 90vh;
+      border-radius: 6px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+    }
+
+    /* ============================================================
+       RESPONSIVE
+       ============================================================ */
+    @media (max-width: 768px) {
+      .nav { height: 56px; padding: 0 16px; }
+      .nav-logo { font-size: 22px; }
+      .nav-logo span { font-size: 18px; }
+
+      .hero {
+        height: 80vh;
+        min-height: 460px;
+        padding: 0 16px 60px;
+      }
+
+      .hero-content { max-width: 100%; }
+
+      .btn {
+        padding: 10px 20px;
+        font-size: 14px;
+      }
+      .btn svg { width: 18px; height: 18px; }
+
+      .rows { margin-top: -80px; }
+
+      .row-title { padding: 30px 16px; font-size: 2rem; }
+      .row-scroll { padding: 8px 16px 20px; }
+
+      .card { width: 160px; }
+
+      .card:hover { transform: scale(1.05); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ============================================================
+       NAV
+       ============================================================ -->
+  <nav class="nav" id="nav">
+    <div class="nav-logo">Us<span>  Originals</span></div>
+    <div class="nav-right">
+      <svg class="nav-icon" viewBox="0 0 24 24"><path d="M21 21l-4.35-4.35M17 10a7 7 0 11-14 0 7 7 0 0114 0z" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+      <svg class="nav-icon" viewBox="0 0 24 24"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
+      <div class="nav-avatar">💕</div>
+    </div>
+  </nav>
+
+  <!-- ============================================================
+       HERO
+       ============================================================ -->
+  <header class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-content">
+      <div class="hero-badge">A Netflix love Original</div>
+      <h1 class="hero-title">Us: The Movie</h1>
+      <div class="hero-meta">
+        <span class="match">98% Match</span>
+        <span>2027</span>
+        <span class="rating">R</span>
+        <span>2 Seasons</span>
+        <span>HD</span>
+      </div>
+      <p class="hero-synopsis">
+        Two people met. What happened next became the greatest love story ever told and it's still being written. 
+        This is the story of us: every laugh, every late-night talk, every moment that made the world feel a little smaller and a lot brighter.
+      </p>
+      <div class="hero-buttons">
+        <button class="btn btn-play" onclick="openVideo()">
+          <svg viewBox="0 0 24 24"><path d="M6 4l15 8-15 8z"/></svg>
+          Play
+        </button>
+        <button class="btn btn-info" onclick="scrollToRow()">
+          <svg viewBox="0 0 24 24"><path d="M11 7h2v2h-2zm0 4h2v6h-2zm1-9C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>
+          More Info
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ============================================================
+       ROWS
+       ============================================================ -->
+  <main class="rows" id="rows">
+
+    <section class="row">
+      <h2 class="row-title">Our Moments <span class="explore">Explore All ›</span></h2>
+      <div class="row-scroll">
+        <div class="card" onclick="openVideo()">
+          <img src="assets/WhatsApp Image 2026-09-29 at 12.33.44 PM.jpeg" alt="Moment 1" onerror="this.style.background='linear-gradient(135deg,#e50914,#7a0a0e)';this.removeAttribute('src');">
+          <div class="card-label">The First Day</div>
+        </div>
+        <div class="card" onclick="openVideo()">
+          <img src="assets/WhatsApp Image 2026-09-29 at 12.33.45 PM.jpeg" alt="Moment 2" onerror="this.style.background='linear-gradient(135deg,#1f4068,#162447)';this.removeAttribute('src');">
+          <div class="card-label">The Big Laugh</div>
+        </div>
+        <div class="card" onclick="openVideo()">
+          <img src="assets/WhatsApp Image 2026-09-29 at 12.33.47 PM.jpeg" alt="Moment 3" onerror="this.style.background='linear-gradient(135deg,#c2185b,#6a0d33)';this.removeAttribute('src');">
+          <div class="card-label">Late Nights</div>
+        </div>
+        <div class="card" onclick="openVideo()">
+          <img src="assets/WhatsApp Image 2026-09-29 at 12.33.48 PM.jpeg" alt="Moment 4" onerror="this.style.background='linear-gradient(135deg,#2c7873,#0b3d3a)';this.removeAttribute('src');">
+          <div class="card-label">That Moment</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="row">
+      <h2 class="row-title">Because You Watched: "Us" <span class="explore">Explore All ›</span></h2>
+      <div class="row-scroll">
+        <div class="card" onclick="openVideo()">
+          <img src="assets/WhatsApp Video 2026-09-29 at 12.33.41 PM.mp4" alt="Moment 5" onerror="this.style.background='linear-gradient(135deg,#8e44ad,#4a235a)';this.removeAttribute('src');">
+          <div class="card-label">Every Little Thing</div>
+        </div>
+        <div class="card" onclick="openVideo()">
+          <img src="assets/WhatsApp Video 2026-09-29 at 12.33.43 PM.mp4" alt="Moment 6" onerror="this.style.background='linear-gradient(135deg,#16a085,#0b5345)';this.removeAttribute('src');">
+          <div class="card-label">Sunset Walks</div>
+        </div>
+        <div class="card" onclick="openVideo()">
+          <img src="assets/WhatsApp Video 2026-09-29 at 12.33.46 PM.mp4" alt="Moment 7" onerror="this.style.background='linear-gradient(135deg,#d35400,#7e2f00)';this.removeAttribute('src');">
+          <div class="card-label">Road Trips</div>
+        </div>
+        <div class="card" onclick="openVideo()">
+          <img src="assets/WhatsApp Video 2026-09-29 at 12.33.50 PM.mp4" alt="Moment 8" onerror="this.style.background='linear-gradient(135deg,#2980b9,#154360)';this.removeAttribute('src');">
+          <div class="card-label">Quiet Mornings</div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ============================================================
+       FOOTER
+       ============================================================ -->
+  <footer class="footer">
+    Made with <span class="heart">♥</span> for the best person in my world.<br />
+    Happy Anniversary. Here's to many more seasons.
+  </footer>
+
+  <!-- ============================================================
+       VIDEO MODAL (stub — full build in Phase 4)
+       ============================================================ -->
+  <div class="modal" id="videoModal">
+    <button class="modal-close" onclick="closeVideo()">✕</button>
+    <video id="annivVideo" controls playsinline preload="metadata">
+      <!-- Phase 4 will swap this for your real video -->
+      <source src="assets/video.mp4" type="video/mp4" />
+      Your browser doesn't support video playback.
+    </video>
+  </div>
+
+  <script>
+    // ===== NAV SCROLL EFFECT =====
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 40);
+    });
+
+    // ===== VIDEO MODAL =====
+    const modal = document.getElementById('videoModal');
+    const video = document.getElementById('annivVideo');
+
+    function openVideo() {
+      modal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+      // Autoplay once opened
+      video.currentTime = 0;
+      video.play().catch(() => { /* user can hit play manually */ });
+    }
+
+    function closeVideo() {
+      modal.classList.remove('active');
+      document.body.style.overflow = '';
+      video.pause();
+    }
+
+    // Close on Escape
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeVideo();
+    });
+
+    // Close on backdrop click
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) closeVideo();
+    });
+
+    // ===== SCROLL TO ROWS =====
+    function scrollToRow() {
+      document.getElementById('rows').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // ===== CARD ENTRANCE ANIMATION =====
+    // Stagger cards in as they scroll into view
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = '1';
+          entry.target.style.transform = 'translateY(0)';
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.card').forEach((card, i) => {
+      card.style.opacity = '0';
+      card.style.transform = 'translateY(20px)';
+      card.style.transition = `opacity 0.5s ease ${i * 0.06}s, transform 0.5s ease ${i * 0.06}s, scale 0.3s cubic-bezier(0.2, 0.8, 0.2, 1)`;
+      observer.observe(card);
+    });
+  </script>
+</body>
+</html>

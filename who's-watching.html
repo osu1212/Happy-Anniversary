@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Who's Watching?</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html, body {
+      height: 100%;
+      background: #141414;
+      color: #fff;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      overflow: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .wrapper {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+      text-align: center;
+      opacity: 0;
+      animation: pageFadeIn 0.9s ease 0.2s forwards;
+    }
+
+    @keyframes pageFadeIn {
+      to { opacity: 1; }
+    }
+
+    .title {
+      font-size: clamp(1.6rem, 4.5vw, 2.6rem);
+      font-weight: 400;
+      letter-spacing: 1px;
+      margin-bottom: clamp(28px, 5vw, 56px);
+      color: #fff;
+    }
+
+    .profiles {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: clamp(14px, 3vw, 32px);
+      max-width: 900px;
+    }
+
+    .profile {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+      font-family: inherit;
+    }
+
+    .profile:hover { transform: scale(1.06); }
+    .profile:active { transform: scale(0.97); }
+
+    .avatar {
+      width: clamp(76px, 14vw, 132px);
+      height: clamp(76px, 14vw, 132px);
+      border-radius: 6px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: box-shadow 0.25s ease, border-color 0.25s ease;
+      border: 3px solid transparent;
+    }
+
+    /* Each colored profile */
+    .avatar.blue   { background: #1f6df2; }
+    .avatar.red    { background: #e50914; }
+    .avatar.orange { background: #f5a623; }
+    .avatar.purple { background: #8e44e0; }
+
+    /* The smiley face — 2 eyes + a smile */
+    .avatar .eyes {
+      position: absolute;
+      top: 30%;
+      left: 22%;
+      right: 22%;
+      display: flex;
+      justify-content: space-between;
+    }
+    .avatar .eye {
+      width: 14%;
+      height: 14%;
+      min-width: 8px;
+      min-height: 8px;
+      border-radius: 50%;
+      background: #fff;
+    }
+    .avatar .smile {
+      position: absolute;
+      bottom: 22%;
+      left: 25%;
+      right: 25%;
+      height: 14%;
+      min-height: 8px;
+      border-bottom: 4px solid #fff;
+      border-radius: 0 0 60px 60px;
+      border-bottom-width: clamp(3px, 0.6vw, 5px);
+    }
+
+    /* The middle profile — her photo */
+    .avatar.photo {
+      background: #222;
+      padding: 0;
+    }
+
+    .avatar.photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* Highlight + "active" state when hovered */
+    .profile:hover .avatar {
+      border-color: #fff;
+      box-shadow: 0 0 0 3px rgba(255,255,255,0.15), 0 10px 30px rgba(0,0,0,0.5);
+    }
+
+    .profile .name {
+      font-size: clamp(0.75rem, 1.4vw, 1rem);
+      color: #999;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      transition: color 0.25s;
+      max-width: 140px;
+      line-height: 1.2;
+    }
+
+    .profile:hover .name { color: #fff; }
+
+    /* Shake animation for wrong choices */
+    .profile.wrong {
+      animation: shake 0.5s ease;
+    }
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20%      { transform: translateX(-8px) rotate(-2deg); }
+      40%      { transform: translateX(8px) rotate(2deg); }
+      60%      { transform: translateX(-6px) rotate(-1deg); }
+      80%      { transform: translateX(6px) rotate(1deg); }
+    }
+
+    /* Toast that appears when a wrong profile is tapped */
+    .toast {
+      position: fixed;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%) translateY(120px);
+      background: rgba(229, 9, 20, 0.95);
+      color: #fff;
+      padding: 14px 28px;
+      border-radius: 8px;
+      font-size: 15px;
+      letter-spacing: 0.5px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      opacity: 0;
+      transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.4s;
+      z-index: 100;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+
+    /* Manage Profiles button (Netflix-style footer) */
+    .manage {
+      margin-top: clamp(32px, 5vw, 56px);
+      padding: 10px 22px;
+      background: transparent;
+      color: #808080;
+      border: 1px solid #808080;
+      font-size: 14px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      cursor: pointer;
+      font-family: inherit;
+      transition: color 0.2s, border-color 0.2s;
+      opacity: 0;
+      animation: pageFadeIn 0.9s ease 0.8s forwards;
+    }
+
+    .manage:hover { color: #fff; border-color: #fff; }
+
+    /* Selection overlay — brief black flash before redirect */
+    .fade-out {
+      position: fixed;
+      inset: 0;
+      background: #000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.5s ease;
+      z-index: 200;
+    }
+    .fade-out.active { opacity: 1; pointer-events: all; }
+
+    /* Mobile tweaks */
+    @media (max-width: 480px) {
+      .profiles { gap: 12px; }
+      .profile .name { font-size: 10px; letter-spacing: 0.5px; }
+      .avatar { border-radius: 4px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="wrapper">
+    <h1 class="title">Who's watching?</h1>
+
+    <div class="profiles" id="profiles">
+
+      <!-- 1. THE (blue) -->
+      <button class="profile" data-name="THE" onclick="pickWrong(this, 'Wrong profile 😄')">
+        <div class="avatar blue">
+          <div class="eyes"><span class="eye"></span><span class="eye"></span></div>
+          <div class="smile"></div>
+        </div>
+        <div class="name">The</div>
+      </button>
+
+      <!-- 2. LOVE (red) -->
+      <button class="profile" data-name="LOVE" onclick="pickWrong(this, 'Not quite 😏')">
+        <div class="avatar red">
+          <div class="eyes"><span class="eye"></span><span class="eye"></span></div>
+          <div class="smile"></div>
+        </div>
+        <div class="name">Love</div>
+      </button>
+
+      <!-- 3. HER PHOTO (the correct choice) -->
+      <button class="profile" data-name="OF" onclick="pickCorrect()">
+        <div class="avatar photo">
+          <!-- Replace her-photo.jpg with her actual photo -->
+          <img src="assets/her-photo.jpg" alt="You"
+               onerror="this.replaceWith(Object.assign(document.createElement('div'),{
+                 style:'width:100%;height:100%;background:linear-gradient(135deg,#e50914,#6a0d1f);display:flex;align-items:center;justify-content:center;font-size:2.2rem;color:#fff;font-weight:900;letter-spacing:-1px;',
+                 textContent:'♥'
+               }))" />
+        </div>
+        <div class="name">Of</div>
+      </button>
+
+      <!-- 4. MY (orange) -->
+      <button class="profile" data-name="MY" onclick="pickWrong(this, 'Keep looking 👀')">
+        <div class="avatar orange">
+          <div class="eyes"><span class="eye"></span><span class="eye"></span></div>
+          <div class="smile"></div>
+        </div>
+        <div class="name">My</div>
+      </button>
+
+      <!-- 5. LIFE (purple) -->
+      <button class="profile" data-name="LIFE" onclick="pickWrong(this, 'Almost 😌')">
+        <div class="avatar purple">
+          <div class="eyes"><span class="eye"></span><span class="eye"></span></div>
+          <div class="smile"></div>
+        </div>
+        <div class="name">Life</div>
+      </button>
+
+    </div>
+
+    <button class="manage" onclick="pickWrong(null, 'Only one profile works here 💕')">
+      Manage Profiles
+    </button>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <!-- Fade overlay for smooth handoff -->
+  <div class="fade-out" id="fadeOut"></div>
+
+  <script>
+    const NEXT_PAGE = "viewing-page.html";
+    const toast = document.getElementById('toast');
+    const fadeOut = document.getElementById('fadeOut');
+    let toastTimer = null;
+
+    function showToast(msg) {
+      toast.textContent = msg;
+      toast.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toast.classList.remove('show'), 2000);
+    }
+
+    function pickWrong(el, msg) {
+      if (el) {
+        el.classList.remove('wrong');
+        void el.offsetWidth; // restart animation
+        el.classList.add('wrong');
+      }
+      showToast(msg);
+    }
+
+    function pickCorrect() {
+      // Small delay so the hover/click feels deliberate
+      setTimeout(() => {
+        fadeOut.classList.add('active');
+        setTimeout(() => {
+          window.location.href = NEXT_PAGE;
+        }, 500);
+      }, 200);
+    }
+
+    // Optional: keyboard accessibility — Enter on focused profile
+    document.querySelectorAll('.profile').forEach(btn => {
+      btn.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          btn.click();
+        }
+      });
+    });
+  </script>
+</body>
+</html>
