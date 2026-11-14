@@ -12,6 +12,17 @@
       --netflix-black: #141414;
       --text-primary: #ffffff;
       --text-secondary: #b3b3b3;
+      --bg-color: #141414;
+      --nav-bg: #141414;
+    }
+
+    /* Light Mode Variables */
+    body.light-mode {
+      --netflix-black: #f3f3f3;
+      --text-primary: #141414;
+      --text-secondary: #555555;
+      --bg-color: #ffffff;
+      --nav-bg: #ffffff;
     }
 
     html, body {
@@ -20,16 +31,13 @@
       font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
       overflow-x: hidden;
       -webkit-font-smoothing: antialiased;
+      transition: background 0.4s ease, color 0.4s ease; 
     }
 
-    /* ============================================================
-       NAV BAR
-       ============================================================ */
+    /* NAV BAR */
     .nav {
       position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
+      top: 0; left: 0; right: 0;
       height: 68px;
       padding: 0 4%;
       display: flex;
@@ -40,9 +48,7 @@
       transition: background 0.3s ease;
     }
 
-    .nav.scrolled {
-      background: var(--netflix-black);
-    }
+    .nav.scrolled { background: var(--netflix-black); }
 
     .nav-logo {
       color: var(--netflix-red);
@@ -55,25 +61,22 @@
     }
 
     .nav-logo span {
-      color: #fff;
+      color: var(--text-primary);
       font-weight: 300;
       letter-spacing: 0;
       font-size: 22px;
+      transition: color 0.4s ease;
     }
 
-    .nav-right {
-      display: flex;
-      align-items: center;
-      gap: 20px;
-    }
+    .nav-right { display: flex; align-items: center; gap: 20px; }
 
     .nav-icon {
       width: 22px;
       height: 22px;
-      fill: #fff;
+      fill: var(--text-primary);
       cursor: pointer;
       opacity: 0.9;
-      transition: opacity 0.2s;
+      transition: opacity 0.2s, fill 0.4s ease;
     }
 
     .nav-icon:hover { opacity: 1; }
@@ -91,9 +94,20 @@
       cursor: pointer;
     }
 
-    /* ============================================================
-       HERO BANNER
-       ============================================================ */
+    /* Theme Toggle Button Style */
+    .theme-toggle {
+      background: none;
+      border: none;
+      color: var(--text-primary);
+      width: 24px;
+      height: 24px;
+      cursor: pointer;
+      padding: 0;
+      transition: transform 0.3s ease, color 0.4s ease;
+    }
+    .theme-toggle:hover { transform: scale(1.15); }  
+
+    /* HERO BANNER */
     .hero {
       position: relative;
       height: 90vh;
@@ -108,13 +122,12 @@
     .hero-bg {
       position: absolute;
       inset: 0;
-      background-image: url('assets/hero.jpg');
+      background-image: url('Assets/hero.jpg');
       background-size: cover;
       background-position: center 30%;
       z-index: 1;
     }
 
-    /* Darkening + fade to page background (Netflix signature) */
     .hero-bg::after {
       content: "";
       position: absolute;
@@ -174,31 +187,18 @@
       flex-wrap: wrap;
     }
 
-    .hero-meta .match {
-      color: #46d369;
-      font-weight: 600;
-    }
-
-    .hero-meta .rating {
-      border: 1px solid var(--text-secondary);
-      padding: 1px 6px;
-      font-size: 11px;
-      letter-spacing: 1px;
-    }
+    .hero-meta .match { color: #46d369; font-weight: 600; }
+    .hero-meta .rating { border: 1px solid var(--text-secondary); padding: 1px 6px; font-size: 11px; letter-spacing: 1px; }
 
     .hero-synopsis {
       font-size: clamp(0.95rem, 1.4vw, 1.1rem);
       line-height: 1.55;
-      color: #e5e5e5;
+      color: var(--text-secondary);
       margin-bottom: 28px;
       text-shadow: 0 2px 8px rgba(0,0,0,0.5);
     }
 
-    .hero-buttons {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
+    .hero-buttons { display: flex; gap: 12px; flex-wrap: wrap; }
 
     .btn {
       display: inline-flex;
@@ -215,50 +215,26 @@
     }
 
     .btn:active { transform: scale(0.97); }
-
-    .btn-play {
-      background: #fff;
-      color: #000;
-    }
-
+    .btn-play { background: #fff; color: #000; }
     .btn-play:hover { background: rgba(255,255,255,0.85); }
-
-    .btn-info {
-      background: rgba(109,109,110,0.7);
-      color: #fff;
-    }
-
+    .btn-info { background: rgba(109,109,110,0.7); color: #fff; }
     .btn-info:hover { background: rgba(109,109,110,0.55); }
+    .btn svg { width: 22px; height: 22px; fill: currentColor; }
 
-    .btn svg {
-      width: 22px;
-      height: 22px;
-      fill: currentColor;
-    }
-
-    /* ============================================================
-       CONTENT ROWS
-       ============================================================ */
-    .rows {
-      position: relative;
-      z-index: 3;
-      margin-top: 0px;
-      padding-bottom: 80px;
-    }
-
-    .row {
-      margin-bottom: 36px;
-    }
+    /* CONTENT ROWS */
+    .rows { position: relative; z-index: 3; margin-top: 0px; padding-bottom: 80px; }
+    .row { margin-bottom: 36px; }
 
     .row-title {
       font-size: 1.15rem;
       font-weight: 600;
-      color: #e5e5e5;
+      color: var(--text-primary);
       padding: 0 4%;
       margin-bottom: 12px;
       display: flex;
       align-items: center;
       justify-content: space-between;
+      transition: color 0.4s ease;
     }
 
     .row-title .explore {
@@ -303,12 +279,11 @@
       box-shadow: 0 10px 30px rgba(0,0,0,0.6);
     }
 
-    .card img {
+    .card img, .card video {
       width: 100%;
       height: 100%;
       object-fit: cover;
       display: block;
-      transition: filter 0.3s;
     }
 
     .card::after {
@@ -325,9 +300,7 @@
 
     .card-label {
       position: absolute;
-      bottom: 8px;
-      left: 10px;
-      right: 10px;
+      bottom: 8px; left: 10px; right: 10px;
       font-size: 12px;
       font-weight: 600;
       color: #fff;
@@ -338,17 +311,12 @@
       text-shadow: 0 1px 4px rgba(0,0,0,0.8);
     }
 
-    .card:hover .card-label {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    .card:hover .card-label { opacity: 1; transform: translateY(0); }
 
-    /* ============================================================
-       FOOTER
-       ============================================================ */
+    /* FOOTER */
     .footer {
       padding: 40px 4% 60px;
-      color: #777;
+      color: var(--text-secondary);
       font-size: 13px;
       text-align: center;
       line-height: 1.8;
@@ -367,9 +335,7 @@
       45%      { transform: scale(1.15); }
     }
 
-    /* ============================================================
-       VIDEO MODAL (Phase 4 hook — stub for now)
-       ============================================================ */
+    /* MODALS (Video & Image) */
     .modal {
       position: fixed;
       inset: 0;
@@ -391,10 +357,8 @@
 
     .modal-close {
       position: absolute;
-      top: 24px;
-      right: 24px;
-      width: 40px;
-      height: 40px;
+      top: 24px; right: 24px;
+      width: 40px; height: 40px;
       border-radius: 50%;
       background: rgba(255,255,255,0.1);
       border: none;
@@ -404,20 +368,19 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      z-index: 1001;
     }
 
     .modal-close:hover { background: rgba(255,255,255,0.2); }
 
-    .modal video {
+    .modal video, .modal img {
       max-width: 100%;
       max-height: 90vh;
       border-radius: 6px;
       box-shadow: 0 20px 60px rgba(0,0,0,0.8);
     }
 
-    /* ============================================================
-       RESPONSIVE
-       ============================================================ */
+    /* RESPONSIVE */
     @media (max-width: 768px) {
       .nav { height: 56px; padding: 0 16px; }
       .nav-logo { font-size: 22px; }
@@ -430,41 +393,34 @@
       }
 
       .hero-content { max-width: 100%; }
-
-      .btn {
-        padding: 10px 20px;
-        font-size: 14px;
-      }
+      .btn { padding: 10px 20px; font-size: 14px; }
       .btn svg { width: 18px; height: 18px; }
-
       .rows { margin-top: -80px; }
-
       .row-title { padding: 30px 16px; font-size: 2rem; }
       .row-scroll { padding: 8px 16px 20px; }
-
       .card { width: 160px; }
-
       .card:hover { transform: scale(1.05); }
     }
   </style>
 </head>
 <body>
 
-  <!-- ============================================================
-       NAV
-       ============================================================ -->
+  <!-- NAV -->
   <nav class="nav" id="nav">
     <div class="nav-logo">Us<span>  Originals</span></div>
     <div class="nav-right">
-      <svg class="nav-icon" viewBox="0 0 24 24"><path d="M21 21l-4.35-4.35M17 10a7 7 0 11-14 0 7 7 0 0114 0z" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
-      <svg class="nav-icon" viewBox="0 0 24 24"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
+      <button id="themeToggle" class="theme-toggle" aria-label="Toggle Theme">
+        <svg id="sunIcon" viewBox="0 0 24 24"><path d="M12 18a6 6 0 1 1 0-12 6 6 0 0 1 0 12zm0-2a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM11 1h2v3h-2V1zm0 19h2v3h-2v-3zM3.515 4.929l1.414-1.414L7.05 5.636 5.636 7.05 3.515 4.93zM16.95 18.364l1.414-1.414 2.121 2.121-1.414 1.414-2.121-2.121zm2.121-14.85l1.414 1.414-2.121 2.121-1.414-1.414 2.121-2.121zM5.636 16.95l1.414 1.414-2.121 2.121-1.414-1.414 2.121-2.121zM23 11v2h-3v-2h3zM4 11v2H1v-2h3z" fill="currentColor"/></svg>
+        <svg id="moonIcon" viewBox="0 0 24 24" style="display:none;"><path d="M10 7a7 7 0 0 0 12 4.9v.1c0 5.5-4.5 10-10 10S2 17.5 2 12 6.5 2 12 2h.1c-1.2 1.2-2 2.9-2 4.9z" fill="currentColor"/></svg>
+      </button>
+      
+      <svg class="nav-icon" viewBox="0 0 24 24"><path d="M21 21l-4.35-4.35M17 10a7 7 0 11-14 0 7 7 0 0114 0z" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+      <svg class="nav-icon" viewBox="0 0 24 24"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z" fill="currentColor"/></svg>
       <div class="nav-avatar">💕</div>
     </div>
   </nav>
 
-  <!-- ============================================================
-       HERO
-       ============================================================ -->
+  <!-- HERO -->
   <header class="hero">
     <div class="hero-bg"></div>
     <div class="hero-content">
@@ -482,7 +438,8 @@
         This is the story of us: every laugh, every late-night talk, every moment that made the world feel a little smaller and a lot brighter.
       </p>
       <div class="hero-buttons">
-        <button class="btn btn-play" onclick="openVideo()">
+        <!-- MAIN PLAY BUTTON OPENS VIDEO -->
+        <button class="btn btn-play" onclick="openVideo('../Assets/VID-20261111-WA0015.mp4')">
           <svg viewBox="0 0 24 24"><path d="M6 4l15 8-15 8z"/></svg>
           Play
         </button>
@@ -494,28 +451,27 @@
     </div>
   </header>
 
-  <!-- ============================================================
-       ROWS
-       ============================================================ -->
+  <!-- ROWS -->
   <main class="rows" id="rows">
 
     <section class="row">
       <h2 class="row-title">Our Moments <span class="explore">Explore All ›</span></h2>
       <div class="row-scroll">
-        <div class="card" onclick="openVideo()">
-          <img src="assets/WhatsApp Image 2026-09-29 at 12.33.44 PM.jpeg" alt="Moment 1" onerror="this.style.background='linear-gradient(135deg,#e50914,#7a0a0e)';this.removeAttribute('src');">
+        <!-- IMAGES OPEN IMAGE MODAL -->
+        <div class="card" onclick="openImage('../Assets/Image1.jpeg')">
+          <img src="../Assets/Image1.jpeg" alt="Moment 1" onerror="this.style.background='linear-gradient(135deg,#e50914,#7a0a0e)';this.removeAttribute('src');">
           <div class="card-label">The First Day</div>
         </div>
-        <div class="card" onclick="openVideo()">
-          <img src="assets/WhatsApp Image 2026-09-29 at 12.33.45 PM.jpeg" alt="Moment 2" onerror="this.style.background='linear-gradient(135deg,#1f4068,#162447)';this.removeAttribute('src');">
+        <div class="card" onclick="openImage('../Assets/Image2.jpeg')">
+          <img src="../Assets/Image2.jpeg" alt="Moment 2" onerror="this.style.background='linear-gradient(135deg,#1f4068,#162447)';this.removeAttribute('src');">
           <div class="card-label">The Big Laugh</div>
         </div>
-        <div class="card" onclick="openVideo()">
-          <img src="assets/WhatsApp Image 2026-09-29 at 12.33.47 PM.jpeg" alt="Moment 3" onerror="this.style.background='linear-gradient(135deg,#c2185b,#6a0d33)';this.removeAttribute('src');">
+        <div class="card" onclick="openImage('../Assets/Image3.jpeg')">
+          <img src="../Assets/Image3.jpeg" alt="Moment 3" onerror="this.style.background='linear-gradient(135deg,#c2185b,#6a0d33)';this.removeAttribute('src');">
           <div class="card-label">Late Nights</div>
         </div>
-        <div class="card" onclick="openVideo()">
-          <img src="assets/WhatsApp Image 2026-09-29 at 12.33.48 PM.jpeg" alt="Moment 4" onerror="this.style.background='linear-gradient(135deg,#2c7873,#0b3d3a)';this.removeAttribute('src');">
+        <div class="card" onclick="openImage('../Assets/Image4.jpeg')">
+          <img src="../Assets/Image4.jpeg" alt="Moment 4" onerror="this.style.background='linear-gradient(135deg,#2c7873,#0b3d3a)';this.removeAttribute('src');">
           <div class="card-label">That Moment</div>
         </div>
       </div>
@@ -524,20 +480,22 @@
     <section class="row">
       <h2 class="row-title">Because You Watched: "Us" <span class="explore">Explore All ›</span></h2>
       <div class="row-scroll">
-        <div class="card" onclick="openVideo()">
-          <img src="assets/WhatsApp Video 2026-09-29 at 12.33.41 PM.mp4" alt="Moment 5" onerror="this.style.background='linear-gradient(135deg,#8e44ad,#4a235a)';this.removeAttribute('src');">
+        <div class="card" onclick="openImage('../Assets/image5.jpeg')">
+          <img src="../Assets/image5.jpeg" alt="Moment 5" onerror="this.style.background='linear-gradient(135deg,#8e44ad,#4a235a)';this.removeAttribute('src');">
           <div class="card-label">Every Little Thing</div>
         </div>
-        <div class="card" onclick="openVideo()">
-          <img src="assets/WhatsApp Video 2026-09-29 at 12.33.43 PM.mp4" alt="Moment 6" onerror="this.style.background='linear-gradient(135deg,#16a085,#0b5345)';this.removeAttribute('src');">
+        
+        <div class="card" onclick="openImage('../Assets/image6.jpeg')">
+          <img src="../Assets/image6.jpeg" alt="Moment 6" onerror="this.style.background='linear-gradient(135deg,#16a085,#0b5345)';this.removeAttribute('src');">
           <div class="card-label">Sunset Walks</div>
         </div>
-        <div class="card" onclick="openVideo()">
-          <img src="assets/WhatsApp Video 2026-09-29 at 12.33.46 PM.mp4" alt="Moment 7" onerror="this.style.background='linear-gradient(135deg,#d35400,#7e2f00)';this.removeAttribute('src');">
+        
+        <div class="card" onclick="openImage('../Assets/image7.jpeg')">
+          <img src="../Assets/image7.jpeg" alt="Moment 7" onerror="this.style.background='linear-gradient(135deg,#d35400,#7e2f00)';this.removeAttribute('src');">
           <div class="card-label">Road Trips</div>
         </div>
-        <div class="card" onclick="openVideo()">
-          <img src="assets/WhatsApp Video 2026-09-29 at 12.33.50 PM.mp4" alt="Moment 8" onerror="this.style.background='linear-gradient(135deg,#2980b9,#154360)';this.removeAttribute('src');">
+        <div class="card" onclick="openImage('../Assets/image8.jpeg')">
+          <img src="../Assets/image8.jpeg" alt="Moment 8" onerror="this.style.background='linear-gradient(135deg,#2980b9,#154360)';this.removeAttribute('src');">
           <div class="card-label">Quiet Mornings</div>
         </div>
       </div>
@@ -545,24 +503,28 @@
 
   </main>
 
-  <!-- ============================================================
-       FOOTER
-       ============================================================ -->
+  <!-- FOOTER -->
   <footer class="footer">
     Made with <span class="heart">♥</span> for the best person in my world.<br />
     Happy Anniversary. Here's to many more seasons.
   </footer>
 
-  <!-- ============================================================
-       VIDEO MODAL (stub — full build in Phase 4)
-       ============================================================ -->
+  <!-- ========================================== -->
+  <!-- MODALS -->
+  <!-- ========================================== -->
+
+  <!-- VIDEO MODAL (For the big Play button) -->
   <div class="modal" id="videoModal">
     <button class="modal-close" onclick="closeVideo()">✕</button>
     <video id="annivVideo" controls playsinline preload="metadata">
-      <!-- Phase 4 will swap this for your real video -->
-      <source src="assets/video.mp4" type="video/mp4" />
-      Your browser doesn't support video playback.
+      <source src="../Assets/VID-20261111-WA0015.mp4" type="video/mp4" />
     </video>
+  </div>
+
+  <!-- IMAGE MODAL (For clicking the cards) -->
+  <div class="modal" id="imageModal">
+    <button class="modal-close" onclick="closeImage()">✕</button>
+    <img id="expandedImg" src="" alt="Expanded Moment">
   </div>
 
   <script>
@@ -572,32 +534,59 @@
       nav.classList.toggle('scrolled', window.scrollY > 40);
     });
 
-    // ===== VIDEO MODAL =====
-    const modal = document.getElementById('videoModal');
+    // ===== VIDEO MODAL LOGIC =====
+    const videoModal = document.getElementById('videoModal');
     const video = document.getElementById('annivVideo');
 
     function openVideo() {
-      modal.classList.add('active');
+      videoModal.classList.add('active');
       document.body.style.overflow = 'hidden';
-      // Autoplay once opened
-      video.currentTime = 0;
-      video.play().catch(() => { /* user can hit play manually */ });
-    }
+      
 
+      setTimeout(() => {
+        video.currentTime = 0;
+        video.play().catch((error) =>{
+          console.log("Autoplay was blocked by the browser. User must click play!");
+        });
+      }, 100);
+    }
     function closeVideo() {
-      modal.classList.remove('active');
+      videoModal.classList.remove('active');
       document.body.style.overflow = '';
       video.pause();
     }
 
-    // Close on Escape
+    // ===== IMAGE MODAL LOGIC =====
+    const imageModal = document.getElementById('imageModal');
+    const expandedImg = document.getElementById('expandedImg');
+
+    function openImage(imageSrc) {
+      expandedImg.src = imageSrc;
+      imageModal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeImage() {
+      imageModal.classList.remove('active');
+      document.body.style.overflow = '';
+      // Small timeout to clear the image after the fade-out animation
+      setTimeout(() => { expandedImg.src = ''; }, 300);
+    }
+
+    // Close either modal on Escape
     document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') closeVideo();
+      if (e.key === 'Escape') {
+        closeVideo();
+        closeImage();
+      }
     });
 
-    // Close on backdrop click
-    modal.addEventListener('click', (e) => {
-      if (e.target === modal) closeVideo();
+    // Close either modal on backdrop click
+    videoModal.addEventListener('click', (e) => {
+      if (e.target === videoModal) closeVideo();
+    });
+    imageModal.addEventListener('click', (e) => {
+      if (e.target === imageModal) closeImage();
     });
 
     // ===== SCROLL TO ROWS =====
@@ -606,7 +595,6 @@
     }
 
     // ===== CARD ENTRANCE ANIMATION =====
-    // Stagger cards in as they scroll into view
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
@@ -622,6 +610,34 @@
       card.style.transform = 'translateY(20px)';
       card.style.transition = `opacity 0.5s ease ${i * 0.06}s, transform 0.5s ease ${i * 0.06}s, scale 0.3s cubic-bezier(0.2, 0.8, 0.2, 1)`;
       observer.observe(card);
+    });
+
+    // ===== LIGHT / DARK MODE TOGGLE =====
+    const themeToggle = document.getElementById('themeToggle');
+    const sunIcon = document.getElementById('sunIcon');
+    const moonIcon = document.getElementById('moonIcon');
+
+    const currentTheme = localStorage.getItem('theme');
+    if (currentTheme === 'light') {
+      document.body.classList.add('light-mode');
+      sunIcon.style.display = 'none';
+      moonIcon.style.display = 'block';
+    }
+
+    themeToggle.addEventListener('click', () => {
+      document.body.classList.toggle('light-mode');
+      
+      const isLight = document.body.classList.contains('light-mode');
+      
+      if (isLight) {
+        localStorage.setItem('theme', 'light');
+        sunIcon.style.display = 'none';
+        moonIcon.style.display = 'block';
+      } else {
+        localStorage.setItem('theme', 'dark');
+        sunIcon.style.display = 'block';
+        moonIcon.style.display = 'none';
+      }
     });
   </script>
 </body>
